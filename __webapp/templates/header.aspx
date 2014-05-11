@@ -1,8 +1,17 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Documento sem título</title>
+<%=_app.getHeader()%>   
 </head>
 <body>
+<div id="fb-root"></div> <div id="gnc-twitter"></div> <div id="gnc-googleplus"></div>
 
+<!-- start: Fixed Menu -->
+<header id="FixedTopBar">
+	<div class="bg">
+        <div class="container">
+        	
+        </div>
+    </div>
+</header>
+<!-- end: Fixed Menu -->

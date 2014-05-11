@@ -1,0 +1,20 @@
+body {
+	background: #F1F1F1;
+	color: #333333;
+}
+
+#FixedTopBar{
+	position: relative;
+	left: 0;
+	top: 0;
+	z-index: 999999;
+}
+
+#FixedTopBar > div{
+	position: fixed;
+	background: url("../img/bg_navbar.png") repeat-x scroll 0 0 transparent;
+	height: 40px;
+	left: 0;
+	right: 0;
+	z-index: 1;
+}
