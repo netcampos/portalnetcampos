@@ -10,9 +10,10 @@ Imports System.IO
 Public Class _appLibrary
 		
 	#Region "INIT"
-		''' <summary>
-		''' Initialize the program.
-		''' </summary>	
+		
+		'***********************************************************************************************************
+		'* description: 
+		'***********************************************************************************************************		
 		Public Sub New()
 			MyBase.New()
 		End Sub
@@ -20,9 +21,6 @@ Public Class _appLibrary
 		Protected Overrides Sub Finalize()
 			MyBase.Finalize()
 		End Sub
-	#End Region
-	
-	#Region "Comom Functions"
 		
 		'***********************************************************************************************************
 		'* description: 
@@ -39,7 +37,35 @@ Public Class _appLibrary
 			Set(ByVal value As String)
 			
 			End Set
-		End Property	
+		End Property
+				
+		'***********************************************************************************************************
+		'* description: 
+		'***********************************************************************************************************
+		Public Property domainAssets() As String
+			Get
+				Return System.Configuration.ConfigurationManager.AppSettings.Get("appAssets")
+			End Get
+			Set(ByVal value As String)
+			
+			End Set
+		End Property
+		
+		'***********************************************************************************************************
+		'* description: 
+		'***********************************************************************************************************
+		Public Property templatePath() As String
+			Get
+				Return System.Configuration.ConfigurationManager.AppSettings.Get("templatePath")
+			End Get
+			Set(ByVal value As String)
+			
+			End Set
+		End Property		
+		
+	#End Region
+	
+	#Region "Comom Functions"
 			
 		'***********************************************************************************************************
 		'* description: 
@@ -63,6 +89,20 @@ Public Class _appLibrary
 				return HttpContext.Current.request.querystring(str)
 			end if	
 		End Function
+		
+		'***********************************************************************************************************
+		'* description: 
+		'***********************************************************************************************************
+		Public Function QS2(ByVal str as string) as String
+			dim retorno, sQuery as string
+			if lenb( qs("uri") ) > 0 then
+				dim uri as string = replace(HttpContext.Current.Request.RawUrl,"/__webapp/default.aspx?idCidade=4787&domain=netcampos.com&uri=","")
+				dim tempURI as New System.Uri(domainName() & uri)
+				sQuery = tempURI.Query
+				retorno = HttpUtility.ParseQueryString(sQuery).Get(str)
+			end if	
+			return retorno
+		End Function			
 		
 		'***********************************************************************************************************
 		'* description: 
@@ -173,10 +213,147 @@ Public Class _appLibrary
 				
 				Return sb.ToString()
 			Catch ex As Exception
-				'NotFound(ex.message())
+				NotFound(virtualPath)
 			End Try			
 			
-		End Function		
+		End Function
+		
+		'***********************************************************************************************************
+		'* description: 
+		'***********************************************************************************************************
+		Public sub responseEnd()
+			HttpContext.Current.response.end()
+		End Sub	
+			
+		'***********************************************************************************************************
+		'* description: 
+		'***********************************************************************************************************
+		Public Function fileExists(byVal arquivo as string) as boolean
+			dim retorno as boolean 
+			if lenb(arquivo) > 0 then
+				If System.IO.File.Exists(mapPath(arquivo)) Then retorno = true
+			end if
+			return retorno
+		End Function
+	
+		'***********************************************************************************************************
+		'* description: 
+		'***********************************************************************************************************
+		Public Sub NotFound(Optional ByVal arquivo as string = "")
+			HttpContext.Current.Response.Clear()
+			
+			try
+				HttpContext.Current.Server.Execute("/__webapp/errors/404.aspx",false)
+				HttpContext.Current.Response.Status = "404 Not Found"
+				HttpContext.Current.Response.StatusCode = 404
+				responseEnd()				
+			catch ex as exception
+				write("<div style=""width:auto;border: solid 1px #666666; padding:10px; margin:0 auto;"" ><h3 style=""margin:0;"">Não Encontrado:</h3><hr/>" & arquivo & "</div>" )
+				HttpContext.Current.Response.Status = "404 Not Found"
+				HttpContext.Current.Response.StatusCode = 404
+				responseEnd()
+			end try
+			
+		End Sub
+		
+		'******************************************************************************************************************
+		'' @SDESCRIPTION:	writes a string to the output in the same line
+		'' @PARAM:			value [string]: output string
+		'******************************************************************************************************************
+		Public sub setHttpHeader()
+			HttpContext.Current.Response.Clear()
+			HttpContext.Current.Response.ClearContent()
+			HttpContext.Current.Response.ClearHeaders()			
+			HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.UTF8
+			HttpContext.Current.Response.ContentType = "text/html"
+			HttpContext.Current.Response.AppendHeader("Server", "NetCampos/1.0")
+			HttpContext.Current.Response.AppendHeader("X-Powered-By","Grupo NetCampos Tecnologia")
+			
+			HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.Public)
+			HttpContext.Current.Response.Cache.SetValidUntilExpires(true)			
+			HttpContext.Current.Response.Cache.SetExpires(DateTime.Now.AddMonths(1))
+			HttpContext.Current.Response.Cache.SetLastModified(DateTime.Now.AddMonths(-1))
+			HttpContext.Current.Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches)
+			HttpContext.Current.Response.Cache.SetOmitVaryStar(true)
+			
+			HttpContext.Current.Response.Cache.SetETag( """" &  getGUID.ToString().Replace( "-", "" ) & """" )
+			
+			'Dim ts As New TimeSpan(0,60,0)
+			'HttpContext.Current.Response.Cache.SetMaxAge(ts)
+			
+			'Dim sIfModifiedSince As String = HttpContext.Current.Request.Headers("If-Modified-Since")
+			
+
+			'HttpContext.Current.Response.Cache.VaryByHeaders("Accept-Language") = true
+			'HttpContext.Current.Response.Cache.VaryByHeaders("User-Agent") = true
+			'HttpContext.Current.Response.Cache.SetLastModified(DateTime.Now.AddHours(-2))
+			
+			'If Not String.IsNullOrEmpty(sIfModifiedSince) then
+				'HttpContext.Current.Response.Status = "304 Not Modified"
+			'end if
+			
+						
+			'HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.UTF8
+			'Dim ts As New TimeSpan(0,60,0)
+			'HttpContext.Current.Response.Cache.SetMaxAge(ts)
+			'HttpContext.Current.Response.Cache.SetExpires(DateTime.Now.AddSeconds(3600))
+			'HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.ServerAndPrivate)
+			'HttpContext.Current.Response.Cache.SetValidUntilExpires(true)
+			'HttpContext.Current.Response.Cache.VaryByHeaders("Accept-Language") = true
+			'HttpContext.Current.Response.Cache.VaryByHeaders("User-Agent") = true
+			'HttpContext.Current.Response.AppendHeader("X-Powered-By","Grupo NetCampos Tecnologia")						
+			
+		End sub	
+		
+		'***********************************************************************************************************
+		'* description: 
+		'***********************************************************************************************************		
+		Public sub defineHttpHeader(Optional ByVal Override304 As Boolean = False)
+			Dim _user as new _appUsers()
+					
+			Try
+				HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.UTF8
+				HttpContext.Current.Response.ContentType = "text/html"
+				HttpContext.Current.Response.AppendHeader("Server", "NetCampos/1.0")
+				HttpContext.Current.Response.AppendHeader("X-Powered-By","Grupo NetCampos Tecnologia")
+				'HttpContext.Current.Response.Cache.SetExpires(DateTime.Now.AddMonths(1))
+				
+				if not _user.UserON() then
+				
+					if Override304 then
+						HttpContext.Current.Response.StatusCode = System.Net.HttpStatusCode.OK
+					else		
+						Dim sIfModifiedSince As String = HttpContext.Current.Request.Headers("If-Modified-Since")
+						
+						If Not String.IsNullOrEmpty(sIfModifiedSince) then
+							HttpContext.Current.Response.StatusCode = 304
+							HttpContext.Current.Response.StatusDescription = "Not Modified"
+							HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.Public)
+							HttpContext.Current.Response.Cache.SetExpires(setExpirerDate)
+						else
+							HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.Public)
+							HttpContext.Current.Response.Cache.SetLastModified(DateTime.UtcNow)
+							HttpContext.Current.Response.AddHeader("If-Modified-Since", DateTime.UtcNow.ToString("r"))
+							
+							Dim maxAge as integer = 86400 * 14
+							HttpContext.Current.Response.Cache.SetExpires(DateTime.Now.AddSeconds(maxAge))
+							HttpContext.Current.Response.Cache.SetMaxAge(new TimeSpan(0, 0, maxAge))
+							HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.Public)
+							HttpContext.Current.Response.Cache.SetValidUntilExpires(true)
+							
+							setExpirerDate = DateTime.Now.AddSeconds(7200)						
+						end if	
+					end if
+					
+				end if
+			
+			Catch taex As System.Threading.ThreadAbortException
+				Throw taex
+			Catch ex As Exception
+				System.Diagnostics.Debug.Print(ex.Message)
+			End Try
+			
+		End Sub
 				
 	#End Region					
 			
@@ -201,7 +378,11 @@ Public Class _appLibrary
 		Public Function pageController() as string
 			dim controller as string = getURL(0)
 			dim retorno as string
-			if lenb(controller) > 0 then retorno = controller
+			if lenb(controller) > 0 then 
+				retorno = controller
+			else
+				retorno = "home"
+			end if
 			return retorno
 		end function		
 		

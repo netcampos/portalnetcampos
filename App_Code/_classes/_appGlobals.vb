@@ -5,6 +5,8 @@ Imports System.Configuration
 Public Module _appGloBals
 		
 	Public currentURL as string
+	Public setExpirerDate as date
+	Public appPageID, appModuleID, appContentID as Integer
 	
 	'***********************************************************************************************************
 	'* description
