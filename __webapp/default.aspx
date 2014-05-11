@@ -1,4 +1,4 @@
 <%@ Page Language="VB" CodeFile="default.vb" Inherits="_Default" %>
 <!--#include file="templates/header.aspx" -->
-asdf
+<%=_app.loadPageContent()%>
 <!--#include file="templates/footer.aspx" -->

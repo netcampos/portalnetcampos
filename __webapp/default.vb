@@ -10,7 +10,8 @@ Partial Class _Default
 	'' @DESCRIPTION:
 	'******************************************************************************************************************	
     Protected Sub Page_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Init
-		_app.init()					
+	
+		
     End Sub
 		
 End Class

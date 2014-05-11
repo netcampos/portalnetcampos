@@ -4,6 +4,9 @@ var domainAssets = "//www.netcampos.com/appassets";
 +function ($) {
   	'use strict';
 	
+		
+	if ($('.gncToolTip').length)
+		$('.gncToolTip').tooltip();	
 	
 	$( document ).ready(function() {
 		// Load up some CSS

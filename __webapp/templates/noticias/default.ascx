@@ -2,7 +2,7 @@
 <br><br><br><br><br><br><br><br>
 <section>
 <div id="gncPage" class="container clearfix">
-
-
+	Campos do Jordão
+    <%=appPageID%>
 </div>
 </section>

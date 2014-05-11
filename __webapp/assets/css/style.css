@@ -18,3 +18,71 @@ body {
 	right: 0;
 	z-index: 1;
 }
+
+#FixedTopBar .pull-left .TotalMembers strong {
+	font-size:16px;
+}
+
+#FixedTopBar ul, 
+#FixedTopBar ul > li {
+	margin: 0;
+	padding: 0;
+	list-style:none;
+}
+
+#FixedTopBar ul {
+	line-height:38px;
+}
+
+#FixedTopBar ul > li {
+	display:inline-block;
+}
+
+#FixedTopBar .icoHome {
+	background: url("../img/icons/home.png") no-repeat scroll 2px 7px transparent;
+	float: left;
+	height: 36px;
+	width: 30px;
+}
+
+#FixedTopBar .pull-right li > a {
+	font-size: 13px;
+	font-weight: bold;
+	color: #012948;
+	display: block;
+	font-weight: bold;
+	height: auto;
+	line-height: 1;
+	padding: 11px 6px 12px;
+	text-decoration: none;
+	text-transform:lowercase;
+}
+
+#FixedTopBar .pull-right li > a:hover {
+	color: #3B5998;
+}
+
+#FixedTopBar .pull-right li:first-child {
+	border-left: 1px solid #CECECE;
+}
+#FixedTopBar .pull-right li {
+	border-left: 1px solid #FFFFFF;
+	border-right: 1px solid #CECECE;
+	cursor: pointer;
+	display: inline;
+	float: left;
+	position: relative;
+}
+#FixedTopBar .pull-right li:hover, .selected {
+	background: #F1F1F1;
+}
+#FixedTopBar .icon {
+	height: 14px;
+	width: 14px;
+	float: left;
+	margin: 0px 4px 0 4px;
+}
+#FixedTopBar ul li span.text {
+	margin: 0 10px 0 0;
+}
+
